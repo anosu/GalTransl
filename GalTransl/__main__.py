@@ -28,6 +28,7 @@ def worker(project_dir: str, config_file_name: str, translator: str, show_banner
         loop = new_event_loop()
         set_event_loop(loop)
 
+    status = 0
     try:
         run(run_galtransl(cfg, translator))
     except KeyboardInterrupt:
@@ -35,13 +36,15 @@ def worker(project_dir: str, config_file_name: str, translator: str, show_banner
         loop.stop()
         LOGGER.info("Goodbye.")
     except RuntimeError as ex:
+        status = 1
         LOGGER.error("程序遇到问题，即将退出（诊断信息：%s）", ex)
     except BaseException as ex:
+        status = 1
         print(ex)
         traceback.print_exception(type(ex), ex, ex.__traceback__)
     finally:
         loop.close()
-        return True
+        return status
 
 
 def main() -> int:
