@@ -137,39 +137,37 @@ class CGPT4Translate(BaseTranslate):
 
     def init_chatbot(self, eng_type, config):
         eng_name = config.getBackendConfigSection("GPT4").get("rewriteModelName", "")
-        if eng_type == "gpt4-turbo":
-            from GalTransl.Backend.revChatGPT.V3 import Chatbot as ChatbotV3
 
-            self.token = self.tokenProvider.getToken(False, True)
-            eng_name = "gpt-4-1106-preview" if eng_name == "" else eng_name
-            is_r1 = ("deepseek" in eng_name.lower() and "r1" in eng_name.lower()) or ("deepseek" in eng_name.lower() and "reasoner" in eng_name.lower())
+        from GalTransl.Backend.revChatGPT.V3 import Chatbot as ChatbotV3
 
-            # R1需要使用专用的prompt
-            if is_r1:
-                system_prompt = DEEPSEEK_SYSTEM_PROMPT
-                trans_prompt = DEEPSEEK_TRANS_PROMPT
-                proofread_prompt = DEEPSEEK_PROOFREAD_PROMPT
-            else:
-                system_prompt = GPT4Turbo_SYSTEM_PROMPT
-                trans_prompt = GPT4Turbo_TRANS_PROMPT
-                proofread_prompt = GPT4Turbo_PROOFREAD_PROMPT
+        self.token = self.tokenProvider.getToken(False, True)
+        eng_name = "gpt-4-1106-preview" if eng_name == "" else eng_name
+        system_prompt = GPT4Turbo_SYSTEM_PROMPT
+        trans_prompt = GPT4Turbo_TRANS_PROMPT
+        proofread_prompt = GPT4Turbo_PROOFREAD_PROMPT
+        # R1需要使用专用的prompt
+        if eng_type == "r1":
+            system_prompt = DEEPSEEK_SYSTEM_PROMPT
+            trans_prompt = DEEPSEEK_TRANS_PROMPT
+            proofread_prompt = DEEPSEEK_PROOFREAD_PROMPT
 
-            base_path = "/v1" if not re.search(r"/v\d+$", self.token.domain) else ""
-            self.chatbot = ChatbotV3(
-                api_key=self.token.token,
-                temperature=0.4,
-                frequency_penalty=0.2,
-                system_prompt=system_prompt,
-                engine=eng_name,
-                api_address=f"{self.token.domain}{base_path}/chat/completions",
-                timeout=30,
-                response_format="json",
-            )
-            self.chatbot.trans_prompt = trans_prompt
-            self.chatbot.proofread_prompt = proofread_prompt
-            self.chatbot.update_proxy(
-                self.proxyProvider.getProxy().addr if self.proxyProvider else None
-            )
+
+        base_path = "/v1" if not re.search(r"/v\d+$", self.token.domain) else ""
+        self.chatbot = ChatbotV3(
+            api_key=self.token.token,
+            temperature=0.4,
+            frequency_penalty=0.2,
+            system_prompt=system_prompt,
+            engine=eng_name,
+            api_address=f"{self.token.domain}{base_path}/chat/completions",
+            timeout=30,
+            response_format="json",
+        )
+        self.chatbot.trans_prompt = trans_prompt
+        self.chatbot.proofread_prompt = proofread_prompt
+        self.chatbot.update_proxy(
+            self.proxyProvider.getProxy().addr if self.proxyProvider else None
+        )
 
     async def translate(self, trans_list: CTransList, gptdict="", proofread=False):
         input_list = []
@@ -215,7 +213,7 @@ class CGPT4Translate(BaseTranslate):
         else:
             prompt_req = prompt_req.replace("[ConfRecord]", "")
         if '"name"' in input_json:
-            if ("deepseek" in self.chatbot.engine.lower() and "r1" in self.chatbot.engine.lower()) or ("deepseek" in self.chatbot.engine.lower() and "reasoner" in self.chatbot.engine.lower()):
+            if self.eng_type == "r1":
                 prompt_req = prompt_req.replace("[NamePrompt3]", NAME_PROMPT4_R1)
             else:
                 prompt_req = prompt_req.replace("[NamePrompt3]", NAME_PROMPT4)

@@ -3,7 +3,7 @@
 
 <h1><p align='center' >GalTransl</p></h1>
 <div align=center><img src="https://img.shields.io/github/v/release/XD2333/GalTransl"/>   <img src="https://img.shields.io/github/license/XD2333/GalTransl"/>   <img src="https://img.shields.io/github/stars/XD2333/GalTransl"/></div>
-<p align='center' >支持GPT3.5/4/Newbing/Sakura等大语言模型的Galgame自动化翻译解决方案</p>
+<p align='center' >支持GPT-4/Claude/Deepseek/Sakura等大语言模型的Galgame自动化翻译解决方案</p>
 
   [English](https://github.com/XD2333/GalTransl/blob/main/README_EN.md)
   
@@ -13,7 +13,7 @@
 &ensp;&ensp;&ensp;&ensp;GalTransl的核心是一组自动化翻译脚本，解决了使用ChatGPT自动化翻译Gal过程中已知的大部分问题，并提高了整体的翻译质量。同时，通过与其他项目的组合，打通了制作补丁的完整流程，一定程度降低了上手门槛。对此感兴趣的朋友可以通过本项目更容易的构建具有一定质量的机翻补丁，并(或许)可以尝试在此框架的基础上高效的构建更高质量的汉化补丁。  
 
   * 特性：   
-  1. 支持**GPT3.5、Newbing、GPT-4、Sakura**等大语言模型，并通过提示工程提高了GPT的翻译质量   
+  1. 支持**GPT-4/Claude/Deepseek/Sakura**等大语言模型，并通过提示工程提高了GPT的翻译质量   
   2. 首创**GPT字典**，让GPT了解人设，准确翻译人名、人称代词与生词   
   3. 通过译前、译后字典与条件字典实现灵活的自动化字典系统   
   4. 实时保存缓存、自动断点续翻   
