@@ -18,13 +18,18 @@ def edit_config():
     gpt4_config["tokens"][0]["token"] = token
     gpt4_config["tokens"][0]["endpoint"] = endpoint
     gpt4_config["rewriteModelName"] = rewrite_model_name
+    config['common']['linebreakSymbol'] = '\\n'
     with open(project_dir / "config.inc.yaml", "w", encoding="utf-8") as f:
         yaml.dump(config, f, sort_keys=False, allow_unicode=True)
 
 
 def main():
+    input_path = project_dir / 'gt_input'
+    if not input_path.exists() or not any(input_path.iterdir()):
+        return
+    
     edit_config()
-    exit(worker(str(project_dir), "config.inc.yaml", "gpt4-turbo"))
+    exit(worker(str(project_dir), "config.inc.yaml", "gpt4"))
 
 
 if __name__ == "__main__":
