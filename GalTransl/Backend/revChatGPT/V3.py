@@ -65,6 +65,7 @@ class Chatbot:
         truncate_limit: int = None,
         system_prompt: str = "You are ChatGPT, a large language model trained by OpenAI. Respond conversationally",
         api_address: str = "https://api.openai.com/v1/chat/completions",
+        disable_thinking: bool = False,
     ) -> None:
         """
         Initialize Chatbot with API key (from https://platform.openai.com/account/api-keys)
@@ -73,6 +74,7 @@ class Chatbot:
         self.api_key: str = api_key
         self.api_address: str = api_address
         self.system_prompt: str = system_prompt
+        self.disable_thinking: bool = disable_thinking
         self.max_tokens: int = max_tokens
         self.truncate_limit: int = truncate_limit or (
             30500
@@ -203,6 +205,7 @@ class Chatbot:
                 "n": kwargs.get("n", self.reply_count),
                 "user": role,
                 "max_tokens": self.get_max_tokens(convo_id=convo_id),
+                **({"thinking": {"type": "disabled"}} if self.disable_thinking else {}),
             },
             timeout=kwargs.get("timeout", self.timeout),
             stream=True,
@@ -279,6 +282,7 @@ class Chatbot:
                 "n": kwargs.get("n", self.reply_count),
                 "user": role,
                 "max_tokens": self.get_max_tokens(convo_id=convo_id),
+                **({"thinking": {"type": "disabled"}} if self.disable_thinking else {}),
             },
             timeout=kwargs.get("timeout", self.timeout),
         ) as response:

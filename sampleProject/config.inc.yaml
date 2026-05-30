@@ -81,11 +81,12 @@ dictionary:
 
 # 翻译后端相关设置
 backendSpecific:
-  GPT4: # OpenAI API接口通用，GPT4/Claude-3/Deepseek-V3/R1
+  GPT4: # OpenAI API接口通用，GPT4/Claude-3/Deepseek-V3/R1 / deepseek-v4-flash / deepseek-v4-pro
     tokens:
       - token: sk-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        endpoint: https://api.openai.com # 使用转发或第三方API时修改
-    rewriteModelName: "" # 使用指定的模型型号替换默认模型
+        endpoint: https://api.openai.com # 使用转发或第三方API时修改（DeepSeek官端: https://api.deepseek.com）
+    rewriteModelName: "" # 自定义模型名。DeepSeek新模型: deepseek-v4-flash / deepseek-v4-pro（旧名将于2026/07/24弃用）
+    disableThinking: false # deepseek-v4-flash 非思考模式须设 true，以在请求中添加 thinking: disabled
   SakuraLLM: # Sakura/Galtransl API
     endpoints:
       - http://127.0.0.1:8080

@@ -18,6 +18,8 @@ def edit_config():
     gpt4_config["tokens"][0]["token"] = token
     gpt4_config["tokens"][0]["endpoint"] = endpoint
     gpt4_config["rewriteModelName"] = rewrite_model_name
+    if rewrite_model_name.startswith("deepseek-v4"):
+        gpt4_config["disableThinking"] = True
     config['common']['linebreakSymbol'] = '\\n'
     with open(project_dir / "config.inc.yaml", "w", encoding="utf-8") as f:
         yaml.dump(config, f, sort_keys=False, allow_unicode=True)

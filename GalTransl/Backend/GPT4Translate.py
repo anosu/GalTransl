@@ -137,6 +137,7 @@ class CGPT4Translate(BaseTranslate):
 
     def init_chatbot(self, eng_type, config):
         eng_name = config.getBackendConfigSection("GPT4").get("rewriteModelName", "")
+        disableThinking = config.getBackendConfigSection("GPT4").get("disableThinking", False)
 
         from GalTransl.Backend.revChatGPT.V3 import Chatbot as ChatbotV3
 
@@ -162,6 +163,7 @@ class CGPT4Translate(BaseTranslate):
             api_address=f"{self.token.domain}{base_path}/chat/completions",
             timeout=30,
             response_format="json",
+            disable_thinking=disableThinking,
         )
         self.chatbot.trans_prompt = trans_prompt
         self.chatbot.proofread_prompt = proofread_prompt
